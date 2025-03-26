@@ -1,0 +1,1 @@
+using DanoneService as service from '../../srv/danone-service';

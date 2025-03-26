@@ -1,0 +1,143 @@
+_schema-version: 3.3.0
+ID: Danone_trials
+description: A simple CAP project.
+version: 1.0.0
+modules:
+- name: Danone_trials-srv
+  type: nodejs
+  path: gen/srv
+  requires:
+  - name: Danone_trials
+  - name: uaa_Danone_trials
+  provides:
+  - name: srv-api
+    properties:
+      srv-url: ${default-url}
+  parameters:
+    buildpack: nodejs_buildpack
+    readiness-health-check-http-endpoint: /health
+    readiness-health-check-type: http
+  build-parameters:
+    builder: npm
+    ignore:
+    - node_modules/
+- name: Danone_trials-db-deployer
+  type: hdb
+  path: gen/db
+  requires:
+  - name: Danone_trials
+  parameters:
+    buildpack: nodejs_buildpack
+- name: Danone_trials-destination-content
+  type: com.sap.application.content
+  requires:
+  - name: Danone_trials-destination-service
+    parameters:
+      content-target: true
+  - name: Danone_trials_html_repo_host
+    parameters:
+      service-key:
+        name: Danone_trials_html_repo_host-key
+  - name: uaa_Danone_trials
+    parameters:
+      service-key:
+        name: uaa_Danone_trials-key
+  parameters:
+    content:
+      instance:
+        destinations:
+        - Name: DANONETRIAL_Danone_trials_html_repo_host
+          ServiceInstanceName: Danone_trials-html5-app-host-service
+          ServiceKeyName: Danone_trials_html_repo_host-key
+          sap.cloud.service: DANONETRIAL
+        - Authentication: OAuth2UserTokenExchange
+          Name: DANONETRIAL_uaa_Danone_trials
+          ServiceInstanceName: Danone_trials-xsuaa-service
+          ServiceKeyName: uaa_Danone_trials-key
+          sap.cloud.service: DANONETRIAL
+        existing_destinations_policy: update
+  build-parameters:
+    no-source: true
+- name: Danone_trials-app-content
+  type: com.sap.application.content
+  path: app
+  requires:
+  - name: Danone_trials_html_repo_host
+    parameters:
+      content-target: true
+  build-parameters:
+    build-result: resources
+    requires:
+    - artifacts:
+      - danonedspacedanonedisplaybom.zip
+      name: danonedspacedanonedisplaybom
+      target-path: resources/
+- name: danonedspacedanonedisplaybom
+  type: html5
+  path: app/danonedisplaybom
+  requires:
+  - name: uaa_Danone_trials
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+resources:
+- name: Danone_trials
+  type: com.sap.xs.hdi-container
+  parameters:
+    config:
+      schema: Danone_db
+    service: hana
+    service-plan: hdi-shared
+- name: Danone_trials-destination-service
+  type: org.cloudfoundry.managed-service
+  parameters:
+    config:
+      HTML5Runtime_enabled: true
+      init_data:
+        instance:
+          destinations:
+          - Authentication: NoAuthentication
+            HTML5.DynamicDestination: true
+            HTML5.ForwardAuthToken: true
+            Name: danonedisp-srv-api
+            ProxyType: Internet
+            Type: HTTP
+            URL: ~{srv-api/srv-url}
+          - Authentication: NoAuthentication
+            Name: ui5
+            ProxyType: Internet
+            Type: HTTP
+            URL: https://ui5.sap.com
+          existing_destinations_policy: update
+      version: 1.0.0
+    service: destination
+    service-name: Danone_trials-destination-service
+    service-plan: lite
+  requires:
+  - name: srv-api
+- name: Danone_trials_html_repo_host
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-name: Danone_trials-html5-app-host-service
+    service-plan: app-host
+- name: uaa_Danone_trials
+  type: org.cloudfoundry.managed-service
+  parameters:
+    path: ./xs-security.json
+    service: xsuaa
+    service-name: Danone_trials-xsuaa-service
+    service-plan: application
+parameters:
+  deploy_mode: html5-repo
+  enable-parallel-deployments: true
+build-parameters:
+  before-all:
+  - builder: custom
+    commands:
+    - npm ci
+    - npx cds build --production

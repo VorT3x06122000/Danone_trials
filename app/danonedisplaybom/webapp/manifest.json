@@ -1,0 +1,131 @@
+{
+  "_version": "1.65.0",
+  "sap.app": {
+    "id": "danone.dspace.danonedisplaybom",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap/generator-fiori:basic",
+      "version": "1.16.5",
+      "toolsId": "a8fa8658-012c-4fed-9842-aaae6759624e"
+    },
+    "dataSources": {
+      "mainService": {
+        "uri": "srv-api/v2/danone/",
+        "type": "OData",
+        "settings": {
+          "annotations": [],
+          "odataVersion": "2.0"
+        }
+      }
+    },
+    "crossNavigation": {
+      "inbounds": {
+        "danonedisp-Display": {
+          "semanticObject": "danonedisp",
+          "action": "Display",
+          "title": "{{danonedisp-Display.flpTitle}}",
+          "signature": {
+            "parameters": {},
+            "additionalParameters": "allowed"
+          }
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": true,
+    "dependencies": {
+      "minUI5Version": "1.133.0",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "danone.dspace.danonedisplaybom.i18n.i18n"
+        }
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
+      }
+    },
+    "resources": {
+      "css": [
+        {
+          "uri": "css/style.css"
+        }
+      ]
+    },
+    "routing": {
+      "config": {
+        "routerClass": "sap.m.routing.Router",
+        "controlAggregation": "pages",
+        "controlId": "app",
+        "transition": "slide",
+        "type": "View",
+        "viewType": "XML",
+        "path": "danone.dspace.danonedisplaybom.view"
+      },
+      "routes": [
+        {
+          "name": "Routedanonebomdisp",
+          "pattern": ":?query:",
+          "target": [
+            "Targetdanonebomdisp"
+          ]
+        }
+      ],
+      "targets": {
+        "Targetdanonebomdisp": {
+          "id": "danonebomdisp",
+          "name": "danonebomdisp"
+        }
+      }
+    },
+    "rootView": {
+      "viewName": "danone.dspace.danonedisplaybom.view.App",
+      "type": "XML",
+      "id": "App"
+    }
+  },
+  "sap.cloud": {
+    "public": true,
+    "service": "DANONETRIAL"
+  }
+}
