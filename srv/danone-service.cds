@@ -4,5 +4,5 @@ service DanoneService {
     entity Products as projection on Danoneref.Products;
     entity Categories as projection on Danoneref.Categories;
     entity ProductCategoriesView as projection on Danoneref.ProductCategoriesView;
-    entity IdValuehelp as projection on Danoneref.IdValuehelp;
+    entity TitleValuehelp as projection on Danoneref.TitleValuehelp;
 }

@@ -7,18 +7,21 @@ annotate DanoneService.ProductCategoriesView with {
     title                   @(title : '{i18n>title}');
     stock                   @(title : '{i18n>stck}');
     type                    @(title : '{i18n>typ}');
+    price                   @(title : '{i18n>price}');
+    status                  @(title : '{i18n>sttus}');
+    Rating                  @(title : '{i18n>rttng}');
+    EXPIRATION_DATE         @(title : '{i18n>expd}');
 
 } ;
 
-annotate DanoneService.IdValuehelp with {
+annotate DanoneService.TitleValuehelp with {
 
-    ID                      @(title : '{i18n>prodid}');
+    title                   @(title : '{i18n>title}');
 
 }
 
 annotate DanoneService.ProductCategoriesView with @(UI : {
     SelectionFields : [
-        ID,
         title
     ],
     LineItem        : [
@@ -34,31 +37,27 @@ annotate DanoneService.ProductCategoriesView with @(UI : {
         {
             Value : stock,
             Label : '{i18n>stck}'
-        },
-        {
-            Value : type,
-            Label : '{i18n>typ}'
-        },
+        }
         
     ]
 });
 
 annotate DanoneService.ProductCategoriesView with {
 
-    ID         @(Common : {
+    title         @(Common : {
         Text      : {
-            $value                 : ID,
+            $value                 : title,
             ![@UI.TextArrangement] : #TextOnly
 
         },
         ValueList : {
             SearchSupported : true,
-            Label           : ID,
-            CollectionPath  : 'IdValuehelp',
+            Label           : title,
+            CollectionPath  : 'TitleValuehelp',
             Parameters      : [{
                 $Type             : 'Common.ValueListParameterInOut',
-                LocalDataProperty : ID,
-                ValueListProperty : 'ID'
+                LocalDataProperty : title,
+                ValueListProperty : 'title'
             }
 
             ]
