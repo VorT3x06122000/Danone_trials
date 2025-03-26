@@ -22,3 +22,6 @@ view ProductCategoriesView as
   from Categories as b
   inner join Products as a
     on a.ID = b.ID;
+
+
+view IdValuehelp as select distinct key ID from Products;

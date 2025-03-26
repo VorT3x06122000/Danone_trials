@@ -1,6 +1,13 @@
-<mvc:View controllerName="danone.dspace.danonedisplaybom.controller.danonebomdisp"
-    xmlns:mvc="sap.ui.core.mvc"
-    xmlns="sap.m">
-    <Page id="page" title="{i18n>title}">
+<mvc:View xmlns:table="sap.ui.table" xmlns:smarttable="sap.ui.comp.smarttable" xmlns:smartfilterbar="sap.ui.comp.smartfilterbar"  controllerName="danone.dspace.danonedisplaybom.controller.danonebomdisp"
+    xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m">
+    <Page id="page" title="{i18n>title}" showHeader="true">
+    <content>
+    <smartfilterbar:SmartFilterBar id="smartfilterbarId" entitySet="ProductCategoriesView" showMessages="true" showClearOnFB="true" >
+    </smartfilterbar:SmartFilterBar>
+    <smarttable:SmartTable id="idSmrtTable" smartFilterId="smartfilterbarId" tableType="ResponsiveTable" editable="false" entitySet="ProductCategoriesView" useVariantManagement="true" showVariantManagement="true">
+    <table:Table id="iDuiTable" selectionMode="None">
+    </table:Table>
+    </smarttable:SmartTable>
+    </content>
     </Page>
 </mvc:View>

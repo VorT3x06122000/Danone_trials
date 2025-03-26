@@ -19,6 +19,7 @@
     "axios": "^1.7.2",
     "express": "^4",
     "hdb": "^0.19.9",
+    "@sap/cds-dk": "^7",
     "passport": "^0",
     "sap-hdbext-promisfied": "^2.202208.1"
   },
